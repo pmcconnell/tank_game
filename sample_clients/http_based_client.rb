@@ -29,7 +29,7 @@ def post (path, body)
 end
 
 token = post("/registrations", { command: 'register', handle:identity })['token']
-token = post("/registrations", { command: 'register', handle:'temp' })['token']
+
 puts token
 
 system("stty raw -echo")
