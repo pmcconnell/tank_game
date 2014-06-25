@@ -36,3 +36,4 @@ Valid commands are
 *	fire
 *	state (returns the state of the playing field, an array of all tanks and their locations)
 
+The game engine code is based on the sample tank game from [PhaserJS](http://phaser.io "PhaserJS")
