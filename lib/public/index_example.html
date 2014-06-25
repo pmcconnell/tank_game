@@ -1,0 +1,124 @@
+<html>
+	<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+  	<script src="phaser.min.js" type="text/javascript"></script>
+  	<script>
+    	var socket_host = window.location.hostname;
+    	var socket;
+      var socket_opened = false;
+      var onopen_count = 0;
+      var message_count = 0;
+
+    	function connect(){
+        console.log("connecting");
+    		var ws_url = 'ws://' + socket_host + ':8081';
+
+    		// Fix for Firefox
+    		if (window.MozWebSocket) {
+    			window.WebSocket = window.MozWebSocket;
+    		}
+    	  socket = new WebSocket(ws_url);
+
+        socket.onopen = function (event) {
+          command = {
+            client: 'master'
+          }
+          socket.send(JSON.stringify(command));
+
+          onopen_count += 1;
+          $('#onopen_count').text(onopen_count);
+
+          socket_opened = true;
+        };
+
+    	  socket.onmessage = function(mess) {
+      		obj = jQuery.parseJSON(mess.data);
+          $('#message').html(mess.data);
+
+          message_count += 1;
+          $('#message_count').text(message_count);
+    	  };
+    	};
+
+      function display_server_ip() {
+        $.ajax({
+          dataType: "json",
+          url: '/ip',
+          success: function(res){
+            console.log(res);
+            $('#ip_address').text(res.private);
+          }
+        });
+      }
+
+      function setGameState() {
+        if (socket_opened) {
+          var d = new Date();
+
+          command = {
+            client: 'master',
+            command: 'state',
+            content: {
+              state: d.getTime()
+            }
+          }
+
+          socket.send(JSON.stringify(command));
+        }
+      }
+
+      var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create });
+
+      function preload() {
+          //  You can fill the preloader with as many assets as your game requires
+
+          //  Here we are loading an image. The first parameter is the unique
+          //  string by which we'll identify the image later in our code.
+
+          //  The second parameter is the URL of the image (relative)
+          //game.load.image('einstein', 'assets/pics/ra_einstein.png');
+      }
+
+      function create() {
+          //  This creates a simple sprite that is using our loaded image and
+          //  displays it on-screen
+          //game.add.sprite(0, 0, 'einstein');
+
+      }
+
+      function create() {
+          //  This creates a simple sprite that is using our loaded image and
+          //  displays it on-screen
+          //game.add.sprite(0, 0, 'einstein');
+
+          g = game.add.graphics();
+          g.lineStyle(10, 0xffd900, 1);
+          g.drawRect(400, 300, 10, 10);
+      }
+
+      function update() {
+         g.x = 1*10;
+         g.y = 1*10;
+         console.log(g.y);
+      }
+
+    	$(document).ready(function() {
+        display_server_ip();
+
+    	  connect();
+
+        setInterval(function(){setGameState()}, 0);
+    	});
+  	</script>
+	</head>
+	<body>
+    <p id="message"></p>
+    <p id="ip_address"></p>
+    <p>
+      <span>OnOpen count: </span><span id="onopen_count"></span>
+    <p>
+    <p>
+      <span>Message count: </span><span id="message_count"></span>
+    <p>
+	</body>
+</html>

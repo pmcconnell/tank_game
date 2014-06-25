@@ -1,0 +1,47 @@
+<html>
+<head>
+<style>
+html, body {
+	font-family: 'andale mono', Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	background-color: #000000;
+}
+h1, h2, h3 {
+	color: white;
+}
+
+.failed {
+	color: #c23621;
+}
+.rounded_failed {
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: 2px solid #c23621;
+  padding: 5px;
+	margin: 3px;
+}
+
+.failure_description {
+	margin-left: 3em;
+}
+.failure_description p {
+	margin: 0px;
+}
+
+</style>
+
+</head>
+<body id="spec_net_body">
+	<img src="images/spec_net.gif"/>
+	</br>
+	<div class="rounded_failed" id="00861db4c758f0e2d02c59eb0949960c">
+		<p class="failed">
+			Resource should exist
+		</p>
+		<div class="failure_description">
+			<p class="failed">404 Error</p>
+			<p class="failed">A resource you requested expected exists? to be true</p>
+		</div>
+	</div>
+</body>
+</html>
